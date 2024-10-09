@@ -2,7 +2,7 @@ import React from 'react';
 import { Box } from '@react-three/drei';
 import Product from './Product';
 
-const Table = ({ position, products }) => {
+const Table = ({ position, products, onProductClick }) => {
   return (
     <group position={position}>
       <Box args={[1.5, 0.05, 1]} position={[0, 0.75, 0]}>
@@ -25,6 +25,7 @@ const Table = ({ position, products }) => {
           key={`product-${product.name}-${index}`}
           productData={product}
           tablePosition={position}
+          onProductClick={onProductClick}  // Pass the onProductClick prop here
         />
       ))}
     </group>

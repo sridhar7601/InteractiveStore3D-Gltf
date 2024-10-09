@@ -1,14 +1,15 @@
 import React, { useEffect, useRef } from 'react';
 import { useGLTF } from '@react-three/drei';
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
-const Product = ({ productData, tablePosition }) => {
+const Product = ({ productData, tablePosition, onProductClick }) => {
   if (!productData || !productData.name || !productData.gltf) {
     console.error('Invalid product data:', productData);
     return null;
   }
 
-  const { name, gltf, textures, scale, position } = productData;
+  const { name, gltf, textures, scale, position, type, price, description } = productData;
   const gltfUrl = `http://localhost:3000/uploads/${name}/${gltf}`;
   
   const { scene } = useGLTF(gltfUrl);
@@ -37,18 +38,29 @@ const Product = ({ productData, tablePosition }) => {
     });
   }, [scene, name, textures]);
 
-  // Calculate the final position by adding the product's position to the table's position
+  useFrame((state, delta) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y += delta * 0.5;
+    }
+  });
+
   const finalPosition = [
-     position.x,
+   position.x,
     position.y,
     position.z
   ];
+
+  const handleClick = (event) => {
+    event.stopPropagation();
+    onProductClick({ name, type, price, description, gltf });
+  };
 
   return (
     <group 
       ref={groupRef} 
       position={finalPosition}
       scale={[scale.x, scale.y, scale.z]}
+      onClick={handleClick}
     >
       <primitive object={scene} />
     </group>
