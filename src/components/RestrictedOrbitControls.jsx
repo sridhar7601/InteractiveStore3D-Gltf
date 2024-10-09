@@ -10,9 +10,12 @@ const RestrictedOrbitControls = () => {
   useEffect(() => {
     if (controlsRef.current) {
       const controls = controlsRef.current;
+      // Limit vertical rotation to prevent going below the floor
       controls.maxPolarAngle = Math.PI / 2;
-      controls.minDistance = 1;
-      controls.maxDistance = 10;
+      // Allow closer approach to tables
+      controls.minDistance = 0.5;
+      // Limit maximum zoom out to keep within the store
+      controls.maxDistance = 40;
     }
   }, []);
 
@@ -20,19 +23,24 @@ const RestrictedOrbitControls = () => {
     if (controlsRef.current) {
       const controls = controlsRef.current;
       
-      controls.target.x = THREE.MathUtils.clamp(controls.target.x, -4.5, 4.5);
-      controls.target.z = THREE.MathUtils.clamp(controls.target.z, -4.5, 4.5);
-      controls.target.y = THREE.MathUtils.clamp(controls.target.y, 0, 4.5);
+      // Allow movement closer to the edges of the store
+      controls.target.x = THREE.MathUtils.clamp(controls.target.x, -4.8, 4.8);
+      controls.target.z = THREE.MathUtils.clamp(controls.target.z, -4.8, 4.8);
+      // Allow looking at objects on the tables
+      controls.target.y = THREE.MathUtils.clamp(controls.target.y, 0, 2);
       
-      camera.position.x = THREE.MathUtils.clamp(camera.position.x, -4.5, 4.5);
-      camera.position.z = THREE.MathUtils.clamp(camera.position.z, -4.5, 9);
-      camera.position.y = THREE.MathUtils.clamp(camera.position.y, 0.5, 4.5);
+      // Extend the camera movement range slightly
+      camera.position.x = THREE.MathUtils.clamp(camera.position.x, -4.8, 4.8);
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z, -4.8, 9);
+      // Allow slightly lower camera position to look at tables
+      camera.position.y = THREE.MathUtils.clamp(camera.position.y, 0.3, 4.8);
 
       controls.update();
     }
   });
 
-  return <OrbitControls ref={controlsRef} target={[0, 1.5, 0]} />;
+  // Set initial focus point slightly higher to look at tables
+  return <OrbitControls ref={controlsRef} target={[0, 1, 0]} />;
 };
 
 export default RestrictedOrbitControls;

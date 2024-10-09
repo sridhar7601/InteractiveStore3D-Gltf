@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Box } from '@react-three/drei';
 import { useControls } from 'leva';
@@ -6,15 +6,38 @@ import Floor from '../components/Floor';
 import Table from '../components/Table';
 import Wall from '../components/Wall';
 import RestrictedOrbitControls from '../components/RestrictedOrbitControls';
+import MobileStand from '../components/MobileStand';
 
 const Store = () => {
+  const [products, setProducts] = useState([]);
+
   const { ambientIntensity, pointIntensity } = useControls({
     ambientIntensity: { value: 0.5, min: 0, max: 1, step: 0.1 },
     pointIntensity: { value: 1, min: 0, max: 2, step: 0.1 },
   });
 
+  useEffect(() => {
+    fetch('http://localhost:3000/products')
+      .then(response => response.json())
+      .then(data => {setProducts(data)})
+      .catch(error => console.error('Error fetching products:', error));
+  }, []);
+
+  // Define fixed table positions
+  const tablePositions = [
+    [-2.5, 0, -2.5],
+    [2.5, 0, -2.5],
+    [-2.5, 0, 2.5],
+    [2.5, 0, 2.5],
+    [0, 0, 0],
+    [-2.5, 0, 0],
+    [2.5, 0, 0],
+    [0, 0, -2.5],
+    [0, 0, 2.5],
+  ];
+
   return (
-    <Canvas camera={{ position: [0, 3, 7], fov: 60 }}>
+    <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
       <color attach="background" args={['#e0e0e0']} />
       <ambientLight intensity={ambientIntensity} />
       <pointLight position={[5, 5, 5]} intensity={pointIntensity} />
@@ -43,11 +66,27 @@ const Store = () => {
         <meshStandardMaterial color="#4a3728" />
       </Box>
 
-      {/* Tables */}
-      <Table position={[-2.5, 0, -2.5]} />
-      <Table position={[2.5, 0, -2.5]} />
-      <Table position={[-2.5, 0, 2.5]} />
-      <Table position={[2.5, 0, 2.5]} />
+      {/* Tables with Products */}
+      {tablePositions.map((position, index) => {
+        const tableNumber = index + 1;
+        const tableProducts = products.filter(p => p.tableNumber === tableNumber).slice(0, 4);
+        return (
+          <Table 
+            key={`table-${tableNumber}`}
+            position={position}
+            products={tableProducts}
+          />
+        );
+      })}
+
+      {/* Mobile Stands */}
+      {products.filter(p => p.type === 'mobile').map((mobileProduct, index) => (
+        <MobileStand
+          key={`mobile-stand-${index}`}
+          position={tablePositions[mobileProduct.tableNumber - 1]}
+          productData={mobileProduct}
+        />
+      ))}
 
       <RestrictedOrbitControls />
     </Canvas>

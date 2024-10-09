@@ -1,7 +1,7 @@
 import React from 'react';
 import * as THREE from 'three';
 import { Box, useTexture } from '@react-three/drei';
-import textureWall from '../assets/texture-4.jpg';
+import textureWall from '../texture-4.jpg';
 
 const Wall = ({ position, rotation, args, isGlass = false }) => {
   const concreteTexture = useTexture(textureWall);
