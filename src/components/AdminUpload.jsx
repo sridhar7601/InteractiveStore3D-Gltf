@@ -4,7 +4,8 @@ import { Canvas, useThree } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
 import { OrbitControls, TransformControls, Html } from '@react-three/drei';
 import * as THREE from 'three';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const PreviewModel = ({ file, position, scale, setPosition, setScale }) => {
   const { scene } = useGLTF(URL.createObjectURL(file));
   const groupRef = useRef();
@@ -80,17 +81,19 @@ const AdminUpload = () => {
       const response = await axios.post('https://3d.raghavendiran.cloud/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
-      alert('Files uploaded successfully!');
+      toast.success('Files uploaded successfully!');
       console.log(response.data);
       // Reset form fields here if needed
     } catch (error) {
       // console.error('Error uploading files:', error);
-      alert('Failed to upload files');
+      toast.error('Failed to upload files');
     }
   };
 
   return (
     <div style={{ display: 'flex', height: '100vh' }}>
+        <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+
       <div style={{ flex: 1, padding: '20px', overflowY: 'auto' }}>
         <h1>Admin Upload</h1>
         <form onSubmit={handleSubmit}>
