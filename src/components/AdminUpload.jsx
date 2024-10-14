@@ -77,7 +77,7 @@ const AdminUpload = () => {
     });
   
     try {
-      const response = await axios.post('http://3d.raghavendiran.cloud/products/upload', formData, {
+      const response = await axios.post('https://3d.raghavendiran.cloud/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       alert('Files uploaded successfully!');
