@@ -26,7 +26,7 @@ const Store = () => {
 
   useEffect(() => {
     // Fetch products only once
-    fetch('http://localhost:3000/products')
+    fetch('http://3d.raghavendiran.cloud/products/products')
       .then(response => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

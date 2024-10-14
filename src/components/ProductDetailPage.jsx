@@ -59,7 +59,7 @@ const ProductDetailPage = ({ product, onBackToShop }) => {
   };
 
   const gltfUrl = product.gltf
-    ? `http://localhost:3000/uploads/${product.name}/${product.gltf}`
+    ? `http://3d.raghavendiran.cloud/products/uploads/${product.name}/${product.gltf}`
     : null;
 
   return (

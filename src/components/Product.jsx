@@ -10,7 +10,7 @@ const Product = ({ productData, tablePosition ,onProductClick}) => {
   }
 
   const { name, gltf, textures, scale, position, type, price, description } = productData;
-  const gltfUrl = `http://localhost:3000/uploads/${name}/${gltf}`;
+  const gltfUrl = `http://3d.raghavendiran.cloud/products/uploads/${name}/${gltf}`;
   
   const { scene } = useGLTF(gltfUrl);
   const groupRef = useRef();
@@ -21,7 +21,7 @@ const Product = ({ productData, tablePosition ,onProductClick}) => {
       if (child.isMesh) {
         if (textures && Array.isArray(textures)) {
           textures.forEach(texture => {
-            const textureUrl = `http://localhost:3000/uploads/${name}/textures/${texture}`;
+            const textureUrl = `http://3d.raghavendiran.cloud/products/uploads/${name}/textures/${texture}`;
             if (texture.includes('baseColor')) {
               child.material.map = new THREE.TextureLoader().load(textureUrl);
             } else if (texture.includes('normal')) {
