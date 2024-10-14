@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { Box } from '@react-three/drei';
+import { Box, Html, useProgress } from '@react-three/drei';
 import { useControls } from 'leva';
 import Floor from '../components/Floor';
 import Table from '../components/Table';
@@ -12,6 +12,45 @@ import AppleLogoBanner from '../components/AppleLogoBanner';
 import WallLight from '../components/WallLight';
 import FocusLight from '../components/FocusLight';
 import * as THREE from 'three';
+
+function Loader() {
+  const { progress } = useProgress();
+  return (
+    <Html center>
+      <div style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        width: '100vw',
+        height: '100vh',
+        background: '#f0f0f0',
+        color: '#333',
+        fontSize: '24px',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        <img src="/image.png" alt="Apple Logo" style={{ width: '100px', marginBottom: '20px' }} />
+        <div>Loading Apple Store</div>
+        <div style={{ 
+          width: '50px', 
+          height: '50px', 
+          border: '5px solid #f3f3f3',
+          borderTop: '5px solid #3498db',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite',
+          margin: '20px 0'
+        }} />
+        <div>{progress.toFixed(2)}%</div>
+      </div>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </Html>
+  );
+}
 
 const Store = () => {
   const [products, setProducts] = useState([]);
@@ -75,7 +114,7 @@ const Store = () => {
   return (
     <Canvas key={key} camera={{ position: [0, 15, 25], fov: 60 }} shadows>
       <color attach="background" args={['#f0f0f0']} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<Loader />}>
         <LightRig ambientIntensity={ambientIntensity} pointIntensity={pointIntensity} />
 
         <Floor />
@@ -113,13 +152,13 @@ const Store = () => {
 
         {/* Tables and Products */}
         {tablePositions.map((tablePosition, index) => (
-        <Table 
-          key={index} 
-          position={tablePosition} 
-          products={products.filter(product => product.tableNumber === index + 1)} 
-          onProductClick={handleProductClick} 
-        />
-      ))}
+          <Table 
+            key={index} 
+            position={tablePosition} 
+            products={products.filter(product => product.tableNumber === index + 1)} 
+            onProductClick={handleProductClick} 
+          />
+        ))}
 
         {/* Ground Lighting */}
         <FocusLight position={[0, 4.9, 0]} intensity={1.5} />
