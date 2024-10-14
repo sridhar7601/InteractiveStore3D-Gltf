@@ -14,8 +14,8 @@ const RestrictedOrbitControls = () => {
       controls.maxPolarAngle = Math.PI / 2;
       // Allow closer approach to tables
       controls.minDistance = 0.5;
-      // Limit maximum zoom out to keep within the store
-      controls.maxDistance = 40;
+      // Limit maximum zoom out to keep within a reasonable distance
+      controls.maxDistance = 50;
     }
   }, []);
 
@@ -23,17 +23,17 @@ const RestrictedOrbitControls = () => {
     if (controlsRef.current) {
       const controls = controlsRef.current;
       
-      // Allow movement closer to the edges of the store
-      controls.target.x = THREE.MathUtils.clamp(controls.target.x, -4.8, 4.8);
-      controls.target.z = THREE.MathUtils.clamp(controls.target.z, -4.8, 4.8);
+      // Allow movement slightly outside the store
+      controls.target.x = THREE.MathUtils.clamp(controls.target.x, -6, 6);
+      controls.target.z = THREE.MathUtils.clamp(controls.target.z, -6, 10);
       // Allow looking at objects on the tables
       controls.target.y = THREE.MathUtils.clamp(controls.target.y, 0, 2);
       
-      // Extend the camera movement range slightly
-      camera.position.x = THREE.MathUtils.clamp(camera.position.x, -4.8, 4.8);
-      camera.position.z = THREE.MathUtils.clamp(camera.position.z, -4.8, 9);
+      // Extend the camera movement range
+      camera.position.x = THREE.MathUtils.clamp(camera.position.x, -6, 6);
+      camera.position.z = THREE.MathUtils.clamp(camera.position.z, -6, 12);
       // Allow slightly lower camera position to look at tables
-      camera.position.y = THREE.MathUtils.clamp(camera.position.y, 0.3, 4.8);
+      camera.position.y = THREE.MathUtils.clamp(camera.position.y, 0.3, 6);
 
       controls.update();
     }

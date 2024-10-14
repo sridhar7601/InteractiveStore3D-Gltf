@@ -84,7 +84,7 @@ const AdminUpload = () => {
       console.log(response.data);
       // Reset form fields here if needed
     } catch (error) {
-      console.error('Error uploading files:', error);
+      // console.error('Error uploading files:', error);
       alert('Failed to upload files');
     }
   };
@@ -152,7 +152,7 @@ const AdminUpload = () => {
         <Canvas camera={{ position: [0, 5, 10], fov: 60 }}>
           <ambientLight intensity={0.5} />
           <pointLight position={[10, 10, 10]} />
-          <Suspense fallback={<Html>Loading 3D preview...</Html>}>
+          {/* <Suspense fallback={<Html>Loading 3D preview...</Html>}>
             {gltfFile && (
               <PreviewModel 
                 file={gltfFile}
@@ -162,7 +162,7 @@ const AdminUpload = () => {
                 setScale={setScale}
               />
             )}
-          </Suspense>
+          </Suspense> */}
           <OrbitControls />
         </Canvas>
       </div>
